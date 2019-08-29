@@ -80,5 +80,31 @@ defmodule EctoPgGeomTest do
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
+  test "Test insert, query, and delete of a line segment" do
+    line_seg_1 = [{1, 2}, {3, 4}]
+    line_seg_2 = [{42, 53}, {84, 95}]
+
+    # test cast of different forms
+    {:ok, line_seg_struct} = EctoPgGeom.LineSegment.cast(line_seg_1)
+    refute(line_seg_struct == ok_value(EctoPgGeom.LineSegment.cast(line_seg_2)))
+
+    row = %EctoPgGeom.TestSchema{line_segment: line_seg_1}
+    other_row = %EctoPgGeom.TestSchema{line_segment: line_seg_2}
+
+    # insert
+    {success, insert_data} = TestRepo.insert(row)
+    assert(success == :ok)
+    assert(insert_data.line_segment == line_seg_1)
+
+    # select
+    select_data = TestRepo.all(EctoPgGeom.TestSchema) |> Enum.at(0)
+    assert(select_data.line_segment == line_seg_struct)
+
+    # deletion of a specific box
+    TestRepo.insert(other_row)
+    query = from t in EctoPgGeom.TestSchema, where: t.line_segment == ^line_seg_struct
+    assert({1, nil} == TestRepo.delete_all(query))
+  end
+
   defp ok_value({:ok, value}), do: value
 end
