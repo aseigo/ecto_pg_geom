@@ -38,7 +38,7 @@ defmodule EctoPgGeom.MixProject do
   defp config_files(_), do: "config/config.exs"
 
   defp mod(:test), do: {EctoPgGeomTest.App, []}
-  defp mod(_), do: nil
+  defp mod(_), do: []
 
   defp aliases do
     [
