@@ -4,7 +4,7 @@ defmodule EctoPgGeomTest do
   require Ecto.Query
 
   alias EctoPgGeom.TestRepo
-  import EctoPgGeom.Point, only: [point_equality: 2]
+  import EctoPgGeom, only: [geometric_equality: 2]
 
   test "Test insert, query, and delete of Box" do
     coords = [{3, 4}, {1, 2}]
@@ -162,7 +162,35 @@ defmodule EctoPgGeomTest do
     # deletion of a specific box
     TestRepo.insert(other_row)
     #query = from t in EctoPgGeom.TestSchema, where: fragment("? ~= ?", t.point, ^point_struct)
-    query = from t in EctoPgGeom.TestSchema, where: point_equality(t.point, point_struct)
+    query = from t in EctoPgGeom.TestSchema, where: geometric_equality(t.point, point_struct)
+    assert({1, nil} == TestRepo.delete_all(query))
+  end
+
+  test "Test insert, query, and delete of a polygon" do
+    polygon_1 = [{1, 2}, {2, 3}]
+    polygon_2 = [%Postgrex.Point{x: 1, y: 2}, {2, 3}]
+    polygon_3 = [{1, 2}, {2, 3}, {3, 4}]
+
+    # test cast of different forms
+    {:ok, polygon_struct} = EctoPgGeom.Polygon.cast(polygon_1)
+    assert(polygon_struct == ok_value(EctoPgGeom.Polygon.cast(polygon_2)))
+    refute(polygon_struct == ok_value(EctoPgGeom.Polygon.cast(polygon_3)))
+
+    row = %EctoPgGeom.TestSchema{polygon: polygon_1}
+    other_row = %EctoPgGeom.TestSchema{polygon: polygon_3}
+
+    # insert
+    {success, insert_data} = TestRepo.insert(row)
+    assert(success == :ok)
+    assert(insert_data.polygon == polygon_1)
+
+    # select
+    select_data = TestRepo.all(EctoPgGeom.TestSchema) |> Enum.at(0)
+    assert(select_data.polygon == polygon_struct)
+
+    # deletion of a specific box
+    TestRepo.insert(other_row)
+    query = from t in EctoPgGeom.TestSchema, where: geometric_equality(t.polygon, polygon_struct)
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
