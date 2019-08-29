@@ -1,4 +1,16 @@
 defmodule EctoPgGeom.Path do
+  @moduledoc """
+  An Ecto type for [paths](https://www.postgresql.org/docs/current/datatype-geometric.html#id-1.5.7.16.9).
+
+  May be used as a field in an `Ecto.Schema` for automatic use of box data stored in the database:
+
+      field :line, EctoPgGeom.Path
+
+  Assigning to a box field can be done either by manually creating a `%Postgrex.Path{}` struct, or by
+  passing a list of points for a closed path or a tuple of points for an open path.
+  `cast/1` and `dump/1` will take care of the translation.
+  """
+
   @behaviour Ecto.Type
   def type, do: Postgrex.Path
 

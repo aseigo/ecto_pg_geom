@@ -1,4 +1,15 @@
 defmodule EctoPgGeom.Circle do
+  @moduledoc """
+  An Ecto type for [circles](https://www.postgresql.org/docs/current/datatype-geometric.html#DATATYPE-CIRCLE).
+
+  May be used as a field in an `Ecto.Schema` for automatic use of box data stored in the database:
+
+      field :circle, EctoPgGeom.Circle
+
+  Assigning to a box field can be done either by manually creating a `%Postgrex.Circle{}` struct, or by
+  passing data in the shape of `{{x, y}, radius}`. `cast/1` and `dump/1` will take care of the translation.
+  """
+
   @behaviour Ecto.Type
   def type, do: Postgrex.Circle
 

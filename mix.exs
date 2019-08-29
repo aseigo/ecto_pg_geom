@@ -26,7 +26,8 @@ defmodule EctoPgGeom.MixProject do
     [
       {:postgrex, ">= 0.0.0"},
       {:ecto, "~> 3.1.4"},
-      {:ecto_sql, "~> 3.1.6", only: :test}
+      {:ecto_sql, "~> 3.1.6", only: :test},
+      {:ex_doc, "~> 0.21.1", only: :dev}
     ]
   end
 
