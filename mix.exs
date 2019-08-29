@@ -46,4 +46,14 @@ defmodule EctoPgGeom.MixProject do
      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
+
+  defp package() do
+    [
+      # These are the default files included in the package
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
+      maintainers: ["Aaron Seigo"],
+      licenses: ["Apache 2.0"],
+      links: %{"GitHub" => "https://github.com/aseigo/ecto_pg_geom"}
+    ]
+  end
 end
