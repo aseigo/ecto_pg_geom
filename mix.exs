@@ -53,6 +53,7 @@ defmodule EctoPgGeom.MixProject do
       # These are the default files included in the package
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Aaron Seigo"],
+      description: "Ecto support for Postgres geometry types",
       licenses: ["Apache 2.0"],
       links: %{"GitHub" => "https://github.com/aseigo/ecto_pg_geom"}
     ]
