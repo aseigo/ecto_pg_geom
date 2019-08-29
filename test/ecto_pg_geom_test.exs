@@ -4,6 +4,7 @@ defmodule EctoPgGeomTest do
   require Ecto.Query
 
   alias EctoPgGeom.TestRepo
+  import EctoPgGeom.Point, only: [point_equality: 2]
 
   test "Test insert, query, and delete of Box" do
     coords = [{3, 4}, {1, 2}]
@@ -135,6 +136,33 @@ defmodule EctoPgGeomTest do
     # deletion of a specific box
     TestRepo.insert(other_row)
     query = from t in EctoPgGeom.TestSchema, where: t.path == ^path_struct
+    assert({1, nil} == TestRepo.delete_all(query))
+  end
+
+  test "Test insert, query, and delete of a point" do
+    point_1 = {1, 2}
+    point_2 = {3, 1}
+
+    # test cast of different forms
+    {:ok, point_struct} = EctoPgGeom.Point.cast(point_1)
+    refute(point_struct == ok_value(EctoPgGeom.Point.cast(point_2)))
+
+    row = %EctoPgGeom.TestSchema{point: point_1}
+    other_row = %EctoPgGeom.TestSchema{point: point_2}
+
+    # insert
+    {success, insert_data} = TestRepo.insert(row)
+    assert(success == :ok)
+    assert(insert_data.point == point_1)
+
+    # select
+    select_data = TestRepo.all(EctoPgGeom.TestSchema) |> Enum.at(0)
+    assert(select_data.point == point_struct)
+
+    # deletion of a specific box
+    TestRepo.insert(other_row)
+    #query = from t in EctoPgGeom.TestSchema, where: fragment("? ~= ?", t.point, ^point_struct)
+    query = from t in EctoPgGeom.TestSchema, where: point_equality(t.point, point_struct)
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
