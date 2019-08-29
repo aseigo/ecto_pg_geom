@@ -106,5 +106,37 @@ defmodule EctoPgGeomTest do
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
+  test "Test insert, query, and delete of a path" do
+    path_1 = [{1, 2}, {2, 3}]
+    path_2 = [%Postgrex.Point{x: 1, y: 2}, {2, 3}]
+    path_3 = [{1, 2}, {2, 3}, {3, 4}]
+    path_4 = {{1, 2}, {2, 3}, {3, 4}}
+
+    # test cast of different forms
+    {:ok, path_struct} = EctoPgGeom.Path.cast(path_1)
+    assert(path_struct == ok_value(EctoPgGeom.Path.cast(path_2)))
+    refute(path_struct == ok_value(EctoPgGeom.Path.cast(path_3)))
+    refute(EctoPgGeom.Path.cast(path_3) == EctoPgGeom.Path.cast(path_4))
+    assert(!path_struct.open)
+    assert(ok_value(EctoPgGeom.Path.cast(path_4)).open)
+
+    row = %EctoPgGeom.TestSchema{path: path_1}
+    other_row = %EctoPgGeom.TestSchema{path: path_3}
+
+    # insert
+    {success, insert_data} = TestRepo.insert(row)
+    assert(success == :ok)
+    assert(insert_data.path == path_1)
+
+    # select
+    select_data = TestRepo.all(EctoPgGeom.TestSchema) |> Enum.at(0)
+    assert(select_data.path == path_struct)
+
+    # deletion of a specific box
+    TestRepo.insert(other_row)
+    query = from t in EctoPgGeom.TestSchema, where: t.path == ^path_struct
+    assert({1, nil} == TestRepo.delete_all(query))
+  end
+
   defp ok_value({:ok, value}), do: value
 end
