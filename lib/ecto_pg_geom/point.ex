@@ -3,8 +3,8 @@ defmodule EctoPgGeom.Point do
   def type, do: Postgrex.Point
 
   # Casting from input into point struct
-  def cast({x, y}), do: {:ok, %Postgrex.Point{x: x, y: y}}
   def cast(value = %Postgrex.Point{}), do: {:ok, value}
+  def cast({x, y}), do: {:ok, %Postgrex.Point{x: x, y: y}}
   def cast(_), do: :error
 
   # loading data from the database

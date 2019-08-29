@@ -3,8 +3,8 @@ defmodule EctoPgGeom.Line do
   def type, do: Postgrex.Line
 
   # Casting from input into point struct
-  def cast({a, b, c}), do: {:ok, %Postgrex.Line{a: a, b: b, c: c}}
   def cast(value = %Postgrex.Line{}), do: {:ok, value}
+  def cast({a, b, c}), do: {:ok, %Postgrex.Line{a: a, b: b, c: c}}
   def cast(_), do: :error
 
   # loading data from the database
