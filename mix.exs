@@ -10,6 +10,7 @@ defmodule EctoPgGeom.MixProject do
       deps: deps(),
       elixirc_paths: elixirc_paths(Mix.env()),
       config_path: config_files(Mix.env()),
+      package: package(),
       aliases: aliases()
     ]
   end
