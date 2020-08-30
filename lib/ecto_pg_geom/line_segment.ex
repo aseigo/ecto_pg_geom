@@ -2,11 +2,11 @@ defmodule EctoPgGeom.LineSegment do
   @moduledoc """
   An Ecto type for [line segments](https://www.postgresql.org/docs/current/datatype-geometric.html#DATATYPE-LSEG).
 
-  May be used as a field in an `Ecto.Schema` for automatic use of box data stored in the database:
+  May be used as a field in an `Ecto.Schema` for automatic use of line segment data stored in the database:
 
       field :line, EctoPgGeom.LineSegment
 
-  Assigning to a box field can be done either by manually creating a `%Postgrex.LineSegment{}` struct, or by
+  Assigning to a line segment field can be done either by manually creating a `%Postgrex.LineSegment{}` struct, or by
   passing a pair of points in a list: `[{x1, y1, {x2, y2}]`. `cast/1` and `dump/1` will take care of the translation.
   """
 
