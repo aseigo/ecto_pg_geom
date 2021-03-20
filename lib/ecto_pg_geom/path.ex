@@ -7,7 +7,7 @@ defmodule EctoPgGeom.Path do
       field :line, EctoPgGeom.Path
 
   Assigning to a path field can be done either by manually creating a `%Postgrex.Path{}` struct, or by
-  passing a list of points for a closed path or a tuple of points for an open path.
+  passing a list of points for an open path or a tuple of points for a closed path.
   `cast/1` and `dump/1` will take care of the translation.
   """
 
@@ -19,15 +19,15 @@ defmodule EctoPgGeom.Path do
 
   def cast(points) when is_list(points) do
     points =
-      Enum.reduce(points, [], &EctoPgGeom.Polygon.to_point_structs/2)
+      Enum.reduce(points, [], &EctoPgGeom.Point.convert_to_struct/2)
       |> Enum.reverse()
 
-    {:ok, %Postgrex.Path{open: false, points: points}}
+    {:ok, %Postgrex.Path{open: true, points: points}}
   end
 
   def cast(points) when is_tuple(points) do
     points = open_points_to_struct(points, tuple_size(points), [])
-    {:ok, %Postgrex.Path{open: true, points: points}}
+    {:ok, %Postgrex.Path{open: false, points: points}}
   end
 
   def cast(_), do: :error
@@ -36,6 +36,9 @@ defmodule EctoPgGeom.Path do
   def load(data) do
     {:ok, data}
   end
+
+  def equal?(left, right), do: left == right
+  def embed_as(_format), do: :self
 
   # dumping data to the database
   def dump(value), do: cast(value)
@@ -47,6 +50,6 @@ defmodule EctoPgGeom.Path do
       open_points_to_struct(
         points,
         count - 1,
-        EctoPgGeom.Polygon.to_point_structs(elem(points, count - 1), acc)
+        EctoPgGeom.Point.convert_to_struct(elem(points, count - 1), acc)
       )
 end

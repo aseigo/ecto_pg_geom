@@ -31,4 +31,7 @@ defmodule EctoPgGeom.LineSegment do
 
   # dumping data to the database
   def dump(value), do: cast(value)
+
+  def equal?(left, right), do: left == right
+  def embed_as(_format), do: :self
 end

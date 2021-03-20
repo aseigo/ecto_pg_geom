@@ -25,6 +25,13 @@ defmodule EctoPgGeom.Point do
     {:ok, data}
   end
 
+  def equal?(left, right), do: left == right
+  def embed_as(_format), do: :self
+
   # dumping data to the database
   def dump(value), do: cast(value)
+
+  def convert_to_struct(%Postgrex.Point{} = point, acc), do: [point | acc]
+  def convert_to_struct({x, y}, acc), do: [%Postgrex.Point{x: x, y: y} | acc]
+  def convert_to_struct([x, y], acc), do: [%Postgrex.Point{x: x, y: y} | acc]
 end
