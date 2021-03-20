@@ -17,12 +17,15 @@ defmodule EctoPgGeom.Polygon do
 
   # Casting from input into point struct
   def cast(value = %Postgrex.Polygon{}), do: {:ok, value}
+
   def cast(points) when is_list(points) do
     vertices =
       Enum.reduce(points, [], &to_point_structs/2)
       |> Enum.reverse()
+
     {:ok, %Postgrex.Polygon{vertices: vertices}}
   end
+
   def cast(_), do: :error
 
   # loading data from the database
@@ -34,5 +37,5 @@ defmodule EctoPgGeom.Polygon do
   def dump(value), do: cast(value)
 
   def to_point_structs(%Postgrex.Point{} = point, acc), do: [point | acc]
-  def to_point_structs({x, y}, acc), do: [%Postgrex.Point{x: x, y: y}| acc]
+  def to_point_structs({x, y}, acc), do: [%Postgrex.Point{x: x, y: y} | acc]
 end

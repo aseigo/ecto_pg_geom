@@ -4,7 +4,7 @@ defmodule EctoPgGeom.MixProject do
   def project do
     [
       app: :ecto_pg_geom,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -26,9 +26,9 @@ defmodule EctoPgGeom.MixProject do
   defp deps do
     [
       {:postgrex, ">= 0.0.0"},
-      {:ecto, "~> 3.1.4"},
-      {:ecto_sql, "~> 3.1.6", only: :test},
-      {:ex_doc, "~> 0.21.1", only: :dev}
+      {:ecto, ">= 3.0.0"},
+      {:ecto_sql, ">= 3.1.6", only: :test},
+      {:ex_doc, ">= 0.24.0", only: :dev}
     ]
   end
 
@@ -44,7 +44,7 @@ defmodule EctoPgGeom.MixProject do
 
   defp aliases do
     [
-     test: ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 

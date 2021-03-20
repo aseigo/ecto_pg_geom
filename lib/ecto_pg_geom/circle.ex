@@ -15,8 +15,13 @@ defmodule EctoPgGeom.Circle do
 
   # Casting from input into point struct
   def cast(value = %Postgrex.Circle{}), do: {:ok, value}
-  def cast({{x, y}, r}), do: {:ok, %Postgrex.Circle{center: %Postgrex.Point{x: x, y: y}, radius: r}}
-  def cast({r, {x, y}}), do: {:ok, %Postgrex.Circle{center: %Postgrex.Point{x: x, y: y}, radius: r}}
+
+  def cast({{x, y}, r}),
+    do: {:ok, %Postgrex.Circle{center: %Postgrex.Point{x: x, y: y}, radius: r}}
+
+  def cast({r, {x, y}}),
+    do: {:ok, %Postgrex.Circle{center: %Postgrex.Point{x: x, y: y}, radius: r}}
+
   def cast(_), do: :error
 
   # loading data from the database

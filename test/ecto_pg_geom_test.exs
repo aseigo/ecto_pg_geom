@@ -23,7 +23,7 @@ defmodule EctoPgGeomTest do
 
     # deletion of a specific box
     TestRepo.insert(other_box)
-    query = from t in EctoPgGeom.TestSchema, where: t.box == ^box_struct
+    query = from(t in EctoPgGeom.TestSchema, where: t.box == ^box_struct)
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
@@ -51,7 +51,7 @@ defmodule EctoPgGeomTest do
 
     # deletion of a specific box
     TestRepo.insert(other_row)
-    query = from t in EctoPgGeom.TestSchema, where: t.circle == ^circle_struct
+    query = from(t in EctoPgGeom.TestSchema, where: t.circle == ^circle_struct)
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
@@ -77,7 +77,7 @@ defmodule EctoPgGeomTest do
 
     # deletion of a specific box
     TestRepo.insert(other_row)
-    query = from t in EctoPgGeom.TestSchema, where: t.line == ^line_struct
+    query = from(t in EctoPgGeom.TestSchema, where: t.line == ^line_struct)
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
@@ -103,7 +103,7 @@ defmodule EctoPgGeomTest do
 
     # deletion of a specific box
     TestRepo.insert(other_row)
-    query = from t in EctoPgGeom.TestSchema, where: t.line_segment == ^line_seg_struct
+    query = from(t in EctoPgGeom.TestSchema, where: t.line_segment == ^line_seg_struct)
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
@@ -135,7 +135,7 @@ defmodule EctoPgGeomTest do
 
     # deletion of a specific box
     TestRepo.insert(other_row)
-    query = from t in EctoPgGeom.TestSchema, where: t.path == ^path_struct
+    query = from(t in EctoPgGeom.TestSchema, where: t.path == ^path_struct)
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
@@ -161,8 +161,8 @@ defmodule EctoPgGeomTest do
 
     # deletion of a specific box
     TestRepo.insert(other_row)
-    #query = from t in EctoPgGeom.TestSchema, where: fragment("? ~= ?", t.point, ^point_struct)
-    query = from t in EctoPgGeom.TestSchema, where: geometric_equality(t.point, point_struct)
+    # query = from t in EctoPgGeom.TestSchema, where: fragment("? ~= ?", t.point, ^point_struct)
+    query = from(t in EctoPgGeom.TestSchema, where: geometric_equality(t.point, point_struct))
     assert({1, nil} == TestRepo.delete_all(query))
   end
 
@@ -190,7 +190,7 @@ defmodule EctoPgGeomTest do
 
     # deletion of a specific box
     TestRepo.insert(other_row)
-    query = from t in EctoPgGeom.TestSchema, where: geometric_equality(t.polygon, polygon_struct)
+    query = from(t in EctoPgGeom.TestSchema, where: geometric_equality(t.polygon, polygon_struct))
     assert({1, nil} == TestRepo.delete_all(query))
   end
 

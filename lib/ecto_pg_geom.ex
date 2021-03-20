@@ -15,5 +15,4 @@ defmodule EctoPgGeom do
   defmacro geometric_equality(p1, p2) do
     quote do: fragment("? ~= ?", unquote(p1), ^unquote(p2))
   end
-
 end
